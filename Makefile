@@ -1,17 +1,18 @@
-LUA_VERSION := 5.2
-CC ?= cc
-CFLAGS := -w
-CPPFLAGS := -I/usr/include/lua$(LUA_VERSION) $(shell pkg-config --cflags lua5.2)
-LDFLAGS := 
-LDLIBS := -lreadline $(shell pkg-config --libs lua5.2)
+LUA_VERSION = 5.2
+
+CC       ?= cc
+CFLAGS   += -w
+CPPFLAGS += -I/usr/include/lua$(LUA_VERSION) $(shell pkg-config --cflags lua$(LUA_VERSION))
+LDFLAGS  += 
+LDLIBS   += -lreadline $(shell pkg-config --libs lua$(LUA_VERSION))
 
 .PHONY: all
 .INTERMEDIATE: lua-readline.o
 
 ifeq ($(OS),"Windows_NT")
-.DEFAULT_GOAL := readline.dll
+  .DEFAULT_GOAL := readline.dll
 else
-.DEFAULT_GOAL := readline.so
+  .DEFAULT_GOAL := readline.so
 endif
 
 readline.so: lua-readline.o
