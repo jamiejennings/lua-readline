@@ -6,14 +6,9 @@ CPPFLAGS += -I/usr/include/lua$(LUA_VERSION) $(shell pkg-config --cflags lua$(LU
 LDFLAGS  += 
 LDLIBS   += -lreadline $(shell pkg-config --libs lua$(LUA_VERSION))
 
-.PHONY: all
 .INTERMEDIATE: lua-readline.o
 
-ifeq ($(OS),"Windows_NT")
-  .DEFAULT_GOAL := readline.dll
-else
-  .DEFAULT_GOAL := readline.so
-endif
+.DEFAULT_GOAL := readline.so
 
 readline.so: lua-readline.o
 	$(CC) -o readline.so -shared -Wl,-soname,readline.so lua-readline.o $(LDFLAGS) $(LDLIBS)
