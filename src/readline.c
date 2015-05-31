@@ -7,13 +7,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int l_readline_readline(lua_State *L) {
-    const char *prompt = lua_optstring(L, 1, "");
+int l_readline_readline(lua_State *const L) {
+    const char *const prompt = lua_optstring(L, 1, "");
     lua_pushstring(L, readline(prompt));
     return 1;
 }
 
-int l_readline_add_history(lua_State *L) {
+int l_readline_add_history(lua_State *const L) {
     if (lua_gettop(L) != 1) {
         lua_pushstring(L, "add_history: takes one argument");
         lua_error(L);
@@ -22,7 +22,7 @@ int l_readline_add_history(lua_State *L) {
     return 0;
 }
 
-int l_readline_clear_history(lua_State *L) {
+int l_readline_clear_history(lua_State *const L) {
     if (lua_gettop(L) != 0) {
         lua_pushstring(L, "clear_history: takes no arguments");
         lua_error(L);
@@ -39,7 +39,7 @@ static const luaL_Reg l_readline[] = {
     {NULL, NULL}
 };
 
-int luaopen_readline(lua_State *L) {
+int luaopen_readline(lua_State *const L) {
     luaL_newlib(L, l_readline);
     return 1;
 }
