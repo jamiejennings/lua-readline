@@ -6,8 +6,8 @@ A Lua wrapper for the GNU readline library.
 
 Usage
 -------------------------------------------------------------------------------
-To use lua-readline, simply put `local readline = require("readline")` in your
-script. (like most modules)
+To use lua-readline, simply put `local readline = require("readline")`
+in your script. (like most modules)
 
 ### Functions
 For documentation (what each function does), see the readline man page.
