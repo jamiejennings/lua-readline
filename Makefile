@@ -1,11 +1,11 @@
-LUA_VERSION = 5.2
+LUA_VERSION ?= 5.2
 
 CC       ?= cc
+RM       ?= rm -f
 CFLAGS   += -w -O2
-CPPFLAGS += $(shell pkg-config --cflags lua$(LUA_VERSION) 2> /dev/null)
+CPPFLAGS += $(shell pkg-config --cflags lua$(LUA_VERSION))
 CPPFLAGS += -I/usr/include/lua$(LUA_VERSION)
-LDLIBS   += -lreadline $(shell pkg-config --libs lua$(LUA_VERSION) 2> /dev/null)
-
+LDLIBS   += -lreadline $(shell pkg-config --libs lua$(LUA_VERSION))
 
 .DEFAULT_GOAL := readline.so
 
@@ -20,7 +20,7 @@ clean:
 distclean: clean
 	$(RM) readline.so
 
-.INTERMEDIATE: lua-readline.o
+.SECONDARY: lua-readline.o
 
 lua-readline.o:
 	$(CC) -c src/readline.c -o lua-readline.o -fPIC $(CFLAGS) $(CPPFLAGS)
