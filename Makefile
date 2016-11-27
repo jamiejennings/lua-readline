@@ -1,26 +1,32 @@
-LUA_VERSION ?= 5.2
+LUA_VERSION ?= 5.3
 
-CC       ?= cc
-RM       ?= rm -f
-CFLAGS   += -w -O2
-CPPFLAGS += $(shell pkg-config --cflags lua$(LUA_VERSION))
-CPPFLAGS += -I/usr/include/lua$(LUA_VERSION)
-LDLIBS   += -lreadline $(shell pkg-config --libs lua$(LUA_VERSION))
+CFLAGS += -fPIC -O2
+CPPFLAGS += -Isrc
+LDFLAGS += -O2
 
-.DEFAULT_GOAL := readline.so
 
-readline.so: lua-readline.o
-	$(CC) -o readline.so -shared -Wl,-soname,readline.so lua-readline.o \
-			$(LDFLAGS) $(LDLIBS)
+CFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-other)
+CPPFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-I)
+LDFLAGS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-L)
+LDFLAGS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-other)
+LDLIBS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-l)
 
-.PHONY: clean distclean
+LDLIBS += -lreadline
 
-clean:
-	$(RM) lua-readline.o
-distclean: clean
-	$(RM) readline.so
 
-.SECONDARY: lua-readline.o
+lib_objs := \
+  src/lua_readline.o
 
-lua-readline.o:
-	$(CC) -c src/readline.c -o lua-readline.o -fPIC $(CFLAGS) $(CPPFLAGS)
+readline.so:LDFLAGS += --retain-symbols-file readline.map
+readline.so: $(lib_objs)
+	$(LD) $(LDFLAGS) -shared -o readline.so $(lib_objs) $(LDLIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+install: readline.so
+	install -d $(DESTDIR)/usr/lib/lua/$(LUA_VERSION)
+	install readline.so $(DESTDIR)/usr/lib/lua/$(LUA_VERSION)/readline.so
+
+.PHONY: install
+.SECONDARY: $(lib_objs)
