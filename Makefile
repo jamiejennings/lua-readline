@@ -35,12 +35,10 @@ ifeq ($(USE_LIBEDIT),true)
 macosx: CPPFLAGS += -DLIBEDIT
 endif
 
-# It appears that Xcode looks in /usr/local/include by default, whereas gcc does not
-ifeq ($(CC),gcc)
+# It appears that new versions of Xcode look in /usr/local/include by default, whereas
+# older versions and also gcc does not
 macosx: LUA_INCLUDE_DIR ?= /usr/local/include
 macosx: CPPFLAGS += -I$(LUA_INCLUDE_DIR)
-endif
-
 
 linux: LDFLAGS += -O2
 linux: CFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-other)
