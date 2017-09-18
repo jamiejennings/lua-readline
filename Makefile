@@ -41,7 +41,6 @@ macosx: LUA_INCLUDE_DIR ?= /usr/local/include
 macosx: CPPFLAGS += -I$(LUA_INCLUDE_DIR)
 
 linux: CPPFLAGS += -I$(LUA_INCLUDE_DIR)
-
 linux: LDFLAGS += -O2
 # linux: CFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-other)
 # linux: CPPFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-I)
