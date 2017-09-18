@@ -3,8 +3,7 @@
 # libreadline on OSX.
 USE_LIBEDIT=true
 
-# Set LUA_INCLUDE_DIR to where your preferred lua .h files live, if
-# not in /usr/local/include.
+# Set LUADIR to lua directory so that $(LUADIR)/include is where .h files live
 
 # -----------------------------------------------------------------------------
 
@@ -35,18 +34,8 @@ ifeq ($(USE_LIBEDIT),true)
 macosx: CPPFLAGS += -DLIBEDIT
 endif
 
-# It appears that new versions of Xcode look in /usr/local/include by default, whereas
-# older versions and also gcc does not
-macosx: LUA_INCLUDE_DIR ?= /usr/local/include
-macosx: CPPFLAGS += -I$(LUA_INCLUDE_DIR)
-
-linux: CPPFLAGS += -I$(LUA_INCLUDE_DIR)
-linux: LDFLAGS += -O2
-# linux: CFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-other)
-# linux: CPPFLAGS += $(shell pkg-config lua$(LUA_VERSION) --cflags-only-I)
-# linux: LDFLAGS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-L)
-# linux: LDFLAGS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-other)
-# linux: LDLIBS += $(shell pkg-config lua$(LUA_VERSION) --libs-only-l)
+macosx: CPPFLAGS += "-I$(LUADIR)/include"
+linux: CPPFLAGS += "-I$(LUADIR)/include"
 
 LDLIBS += -lreadline
 
